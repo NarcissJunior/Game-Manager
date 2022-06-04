@@ -28,6 +28,11 @@ class CharacterController extends Controller
         return $this->service->create($request);
     }
 
+    public function show(Request $request)
+    {
+        return $this->service->show($request->id);
+    }
+
     public function validateRequest(Request $request)
     {
         $validator = Validator::make($request->all(), [

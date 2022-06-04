@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use App\Http\Controllers\Controller;
+use Request;
 
-use App\Commands\RegisterBattleCommand;
-use App\Services\BattleService;
+use App\Jobs\ProcessBattle;
 
 class BattleController extends Controller
 {
-    protected BattleService $service;
-
-    public function __construct(BattleService $service)
-    {
-        $this->service = $service;
-    }
-
     public function battle(Request $request)
     {
         $input = [
@@ -26,8 +18,8 @@ class BattleController extends Controller
 
         //Validate the request
 
-        $this->dispatch(new RegiterBattleCommand($input));
+        ProcessBattle::dispatch($input);
 
-        return $this->service->register($request);
+        //return $this->service->register($request);
     }
 }
