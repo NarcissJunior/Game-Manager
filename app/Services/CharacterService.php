@@ -32,6 +32,11 @@ class CharacterService
 
     public function show($id)
     {
+        
+        return response()->json([
+            'message' => 'Your character '.$id.'!!'
+        ], 200);
+
         try {   
             return Character::findOrFail($id);
         } catch (Exception $e)

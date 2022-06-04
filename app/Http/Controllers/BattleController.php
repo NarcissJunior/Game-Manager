@@ -18,7 +18,7 @@ class BattleController extends Controller
 
         //Validate the request
 
-        ProcessBattle::dispatch($input);
+        $eai = ProcessBattle::dispatch($input);
 
         //return $this->service->register($request);
     }
