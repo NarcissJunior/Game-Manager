@@ -38,17 +38,19 @@ class ProcessBattle implements ShouldQueue
      */
     public function handle()
     {
-        if($this->dodge($playerTwo) == 0)
-        {
-            $damageIncoming = $this->calculateDamage($playerOne);
-            $this->applyDamage($playerOne);
-        }
-        else
-        {
-            $damageIncoming = 0;
-        }
+        // if($this->dodge($playerTwo) == 0)
+        // {
+        //     $damageIncoming = $this->calculateDamage($playerOne);
+        //     $this->applyDamage($playerOne);
+        // }
+        // else
+        // {
+        //     $damageIncoming = 0;
+        // }
 
-        $this->verifyDeath($playerTwo);
+        // $this->verifyDeath($playerTwo);
+
+        return "salve galera";
         
     }
 

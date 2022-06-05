@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use Illuminate\Support\Facades\Redis;
 use App\Models\Character;
 
 class CharacterService
@@ -14,9 +16,8 @@ class CharacterService
     {
         //save in DB
 
-        $character = new Character;
-
-        $character->fill([
+        $hashValue = "character_" . $request->id;
+        Redis::set($hashValue, json_encode([
             'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
@@ -24,10 +25,8 @@ class CharacterService
             'silver' => $request->silver,
             'attack' => $request->attack,
             'luck' => $request->luck,
-            'hitpoints' => $request->hitpoints,
-        ]);
-
-        $character->save();
+            'hitpoints' => $request->hitpoints
+        ]));
 
         return response()->json([
             'message' => 'Your character has been created!!'
@@ -42,12 +41,8 @@ class CharacterService
 
     public function show($id)
     {
-        try {   
-            return Character::findOrFail($id);
-        } catch (Exception $e)
-        {
-            throw new Exception('Cannot find player id:' . $id);
-        }
+        $hashValue = "character_" . $id;
+        return  json_decode(Redis::get($hashValue));
     }
 
     public function retrieveResources()
@@ -57,6 +52,6 @@ class CharacterService
 
     public function retrieveMaxHp($id)
     {
-        dd($id);
+        return "ok";
     }
 }

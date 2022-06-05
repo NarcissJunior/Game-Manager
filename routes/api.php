@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\BattleController;
 use App\Http\Controllers\LeaderboardController;
-
+use App\Http\Controllers\RedisTesterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +27,4 @@ Route::post('/character/create', [CharacterController::class, 'create']);
 Route::get('/character/show', [CharacterController::class, 'show']);
 Route::post('/battle', [BattleController::class, 'battle']);
 Route::get('/leaderboard', [LeaderboardController::class, 'show']);
-
-
+Route::get('/test', [RedisTesterController::class, 'test']);
