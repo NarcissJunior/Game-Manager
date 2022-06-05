@@ -15,7 +15,17 @@ class CharacterService
         //save in DB
 
         $character = new Character;
-        $character->id = $request->id;
+
+        $character->fill([
+            'id' => $request->id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'gold' => $request->gold,
+            'silver' => $request->silver,
+            'attack' => $request->attack,
+            'luck' => $request->luck,
+            'hitpoints' => $request->hitpoints,
+        ]);
 
         $character->save();
 
@@ -32,11 +42,6 @@ class CharacterService
 
     public function show($id)
     {
-        
-        return response()->json([
-            'message' => 'Your character '.$id.'!!'
-        ], 200);
-
         try {   
             return Character::findOrFail($id);
         } catch (Exception $e)

@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         //leaderboard and logging
         Queue::after(function (JobProcessed $event) {
             // $event->connectionName
-            // $event->job
+            echo "passei aqui no boot em";
             // $event->job->payload()
         });
     }
