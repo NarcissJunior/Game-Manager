@@ -54,4 +54,9 @@ class CharacterService
     {
         return "ok";
     }
+
+    public function retrieveMaxHp($id)
+    {
+        dd($id);
+    }
 }

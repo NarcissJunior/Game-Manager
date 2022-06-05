@@ -9,22 +9,26 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use App\Models\Character;
+use App\Services\BattleService;
+
 class ProcessBattle implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $attacker;
-    protected $defender;
+    protected Character $playerOne;
+    protected Character $playerTwo;
+    protected BattleService $characterService;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($attacker, $defender)
+    public function __construct($playerOne, $playerTwo)
     {
-        $this->attacker = $attacker;
-        $this->defender = $defender;
+        $this->playerOne = $playerOne;
+        $this->playerTwo = $playerTwo;
     }
 
     /**
@@ -34,42 +38,69 @@ class ProcessBattle implements ShouldQueue
      */
     public function handle()
     {
-        $dodged = $this->dodge($this->defender);
-
-        if ($dodged != 0){
-            $damage = 0;
+        if($this->dodge($playerTwo) == 0)
+        {
+            $damageIncoming = $this->calculateDamage($playerOne);
+            $this->applyDamage($playerOne);
         }
         else
         {
-            //$damage = calculateDamage($this->attacker);
+            $damageIncoming = 0;
         }
-    }
 
-    public function removeHp($value, $player)
-    {
-        $player->hitpoints = $player->hitpoints -  $value;
-    }
-
-    //TODO calculate damage
-    public function calculateDamage($player)
-    {
-        $lostHitpoints = $actualHitpoints - $player->hitpoints;
-        $minimumAtkPossible = $player->attack / 2;
-        if ($powerOfDamage <= $minimumAtkPossible)
-        {
-            return $powerOfDamage;
-        }
-        return $powerOfDamage;
+        $this->verifyDeath($playerTwo);
+        
     }
 
     public function dodge($player)
     {
-        $chance = range(1, 100);
+        $chance = rand(1, 100);
         if ($chance <= $player->luck)
         {
             return "Wow! The player " . $player->name . "dodged the attack!!";
         }
         return 0;
+    }
+
+    public function calculateDamage($player)
+    {
+        $capAttack = $player->attack / 2;
+        $minimumAtkPossible = round($capAttack, 0, PHP_ROUND_HALF_UP);
+
+        //$this->characterService->retrieveMaxHp($player);
+        $player->attack = 70;
+        $player->hitpoints = 100;
+
+        $maxHp = 100;
+        $currentHP = 70;
+
+        $lostHpPercent = (0.1 * ($maxHp - $currentHP));
+
+        if ($lostHp != 0)
+        {
+
+            return $powerOfDamage;
+            $player->attack = $currentAtk;
+        }
+        return $powerOfDamage;
+    }
+
+    public function applyDamage($player)
+    {
+        return 10;
+    }
+
+    public function verifyDeath($player)
+    {
+        if($player->hitpoints <= 0)
+            return "Wow! The player " . $player->name . "is DEAD!! >:(";
+        else
+            return 1;
+    }
+
+    public function removeHp($value, $player)
+    {
+        $player->hitpoints = $player->hitpoints -  $value;
     }
 
     public function decreaseResources($goldValue, $silverValue, $player)
