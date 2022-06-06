@@ -1,4 +1,4 @@
-Repo created to host my code for Digit Games test
+Repo created to host Digit Games test
 
 To run the application you need to have PHP installed in your machine. You can download it here: https://www.php.net/downloads.php After installing PHP, we need to install composer to help us ith our dependencies. https://getcomposer.org/download/
 
