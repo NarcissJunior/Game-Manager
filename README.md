@@ -6,8 +6,12 @@ https://www.php.net/downloads.php
 After installing PHP, we need to install composer to help us manage our dependencies.
 https://getcomposer.org/download/
 
-After setting up PHP and composer, we need to install our dependencies
-Enter in the folder of the project and run the command:
+After setting up PHP and composer, we need to install our dependencies.
+
+But first, don't forget to copy the file "env.example" and create our ".env" file
+
+
+After this, enter in the folder of the project and run the command:
 
 ```
 composer install
