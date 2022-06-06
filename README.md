@@ -18,4 +18,13 @@ You check the application in the address: http://localhost:8000/
 
 If you see Laravel's home page, everything is ok.
 
+Also, you can run the tests in the application to verify if everything is working fine.
+I am using PHPUnit for the test framework. You can use 2 commands to run the tests inside de project folder. Here are the commands:
+
+./vendor/bin/phpunit
+
+php artisan test
+
+
+
 To test the application, you can use Postman. You can download it here: https://www.postman.com/downloads/
