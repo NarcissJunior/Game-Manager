@@ -25,8 +25,6 @@ I am using PHPUnit for the test framework. You can use 2 commands to run the tes
 
 php artisan test
 
-Bad part:
-The test was built using Eloquent ORM from laravel, so for the test runs propperly, you need to have an instance of a mysql database running
 
 To test the application, you can use Postman. You can download it here: https://www.postman.com/downloads/
 I will put the collection to test the apply in this repo.
