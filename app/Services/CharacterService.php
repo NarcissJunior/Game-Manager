@@ -15,7 +15,6 @@ class CharacterService
     public function create($request)
     {
         //save in DB
-
         $hashValue = "character_" . $request->id;
         Redis::set($hashValue, json_encode([
             'id' => $request->id,
@@ -25,7 +24,9 @@ class CharacterService
             'silver' => $request->silver,
             'attack' => $request->attack,
             'luck' => $request->luck,
-            'hitpoints' => $request->hitpoints
+            'hitpoints' => $request->hitpoints,
+            'goldLoot' => 0,
+            'silverLoot' => 0
         ]));
 
         return response()->json([
@@ -33,25 +34,15 @@ class CharacterService
         ], 200);
     }
 
-    //update gold, silver and farmpoints
+    //update gold, silver and loot
     public function update($data)
     {
         
     }
 
-    public function show($id)
+    public function find($id)
     {
         $hashValue = "character_" . $id;
         return  json_decode(Redis::get($hashValue));
-    }
-
-    public function retrieveResources()
-    {
-        return "ok";
-    }
-
-    public function retrieveMaxHp($id)
-    {
-        return "ok";
     }
 }

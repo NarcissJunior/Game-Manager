@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Request;
+use Illuminate\Http\Request;
 
 use App\Services\BattleService;
 
@@ -18,13 +18,13 @@ class BattleController extends Controller
 
     public function battle(Request $request)
     {
-        $input = [
-            'attacker' => Request::input('attacker'),
-            'defender' => Request::input('defender')
+        $players = [
+            'attacker' => $request->input('attacker'),
+            'defender' => $request->input('defender')
         ];
 
         //Validate the request
 
-        return $this->service->register($input);
+        return $this->service->register($players);
     }
 }

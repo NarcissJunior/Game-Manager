@@ -9,49 +9,39 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-use App\Models\Character;
 use App\Services\BattleService;
 
 class ProcessBattle implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Character $playerOne;
-    protected Character $playerTwo;
-    protected BattleService $characterService;
+    protected $attacker;
+    protected $defender;
+    protected $log = [];
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct($playerOne, $playerTwo)
+    public function __construct($attacker, $defender)
     {
-        $this->playerOne = $playerOne;
-        $this->playerTwo = $playerTwo;
+        $this->attacker = $attacker;
+        $this->defender = $defender;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        // if($this->dodge($playerTwo) == 0)
-        // {
-        //     $damageIncoming = $this->calculateDamage($playerOne);
-        //     $this->applyDamage($playerOne);
-        // }
-        // else
-        // {
-        //     $damageIncoming = 0;
-        // }
+        if($this->dodge($this->defender) == 0)
+        {
+            $damageIncoming = $this->calculateDamage($this->attacker);
+            $this->applyDamage($this->defender, $this->attacker, $damageIncoming);
+        }
 
-        // $this->verifyDeath($playerTwo);
+        $playerAlive = $this->verifyDeath($this->defender);
 
-        return "salve galera";
-        
+        if($playerAlive != 1)
+        {
+            $loot = $this->calculateBattleResources($this->attacker, $this->defender);
+            //$this->updateRanking($loot);
+        }
+
+        return $this->log;
     }
 
     public function dodge($player)
@@ -59,50 +49,38 @@ class ProcessBattle implements ShouldQueue
         $chance = rand(1, 100);
         if ($chance <= $player->luck)
         {
-            return "Wow! The player " . $player->name . "dodged the attack!!";
+            $dodgeLog = "Wow! The player " . $player->name . " dodged the attack!!";
+            $this->log["dodge"] = $dodgeLog;
+            return $dodgeLog;
         }
         return 0;
     }
 
     public function calculateDamage($player)
     {
-        $capAttack = $player->attack / 2;
-        $minimumAtkPossible = round($capAttack, 0, PHP_ROUND_HALF_UP);
+        //$capAttack = $player->attack / 2;
+        //$minimumAtkPossible = round($capAttack, 0, PHP_ROUND_HALF_UP);
 
         //$this->characterService->retrieveMaxHp($player);
-        $player->attack = 70;
-        $player->hitpoints = 100;
-
-        $maxHp = 100;
-        $currentHP = 70;
-
-        $lostHpPercent = (0.1 * ($maxHp - $currentHP));
-
-        if ($lostHp != 0)
-        {
-
-            return $powerOfDamage;
-            $player->attack = $currentAtk;
-        }
-        return $powerOfDamage;
+        return $player->attack;
     }
 
-    public function applyDamage($player)
+    public function applyDamage($playerDefender, $playerAttacker, $damageIncoming)
     {
-        return 10;
+        $playerDefender->hitpoints = $playerDefender->hitpoints - $damageIncoming;
+        $this->log["damagedealt"] = "The Player " . $playerDefender->name . " lost " . $damageIncoming . " hitpoints due to an attack from " . $playerAttacker->name . ".";
     }
 
     public function verifyDeath($player)
     {
         if($player->hitpoints <= 0)
-            return "Wow! The player " . $player->name . "is DEAD!! >:(";
+        {
+            $deathLog = "Wow! The player " . $player->name . " is DEAD!! >:(";
+            $this->log["deathlog"] = $deathLog;
+            return $deathLog;
+        }
         else
             return 1;
-    }
-
-    public function removeHp($value, $player)
-    {
-        $player->hitpoints = $player->hitpoints -  $value;
     }
 
     public function decreaseResources($goldValue, $silverValue, $player)
@@ -110,26 +88,41 @@ class ProcessBattle implements ShouldQueue
         $player->gold = $player->gold - $goldValue;
         $player->silver = $player->silver - $silverValue;
 
-        return "Player " . $player->name . " lost " . $goldValue . " pieces of gold and " . $silverValue . " pieces of silver.";
+        $decreaseLog = "Player " . $player->name . " lost " . $goldValue . " pieces of gold and " . $silverValue . " pieces of silver.";
+        $this->log["decreaselog"] = $decreaseLog;
+        return $decreaseLog;
     }
 
     public function increaseResources($goldValue, $silverValue, $player)
     {
         $player->gold = $player->gold + $goldValue;
+        $player->goldLoot = $player->goldLoot;
         $player->silver = $player->silver + $silverValue;
+        $player->silverLoot = $player->silverLoot;
 
-        return "Player " . $player->name . " won " . $goldValue . " pieces of gold and " . $silverValue . " pieces of silver.";
+        $increaseLog = "Player " . $player->name . " received " . $goldValue . " pieces of gold and " . $silverValue . " pieces of silver.";
+        $this->log["increaselog"] = $increaseLog;
+        return $increaseLog;
     }
 
     public function calculateBattleResources($winner, $loser)
     {
+        $values = [];
         $percentage = (0.1 * rand(10, 20));
         $goldValue = round($loser->gold * $percentage);
         $silverValue = round($loser->silver * $percentage);
 
-        $log[] = $this->decreaseResources($goldValue, $silverValue, $loser);
-        $log[] = $this->increaseResources($goldValue, $silverValue, $winner);
+        $this->log["loserresources"] = $this->decreaseResources($goldValue, $silverValue, $loser);
+        $this->log["winnerresources"] = $this->increaseResources($goldValue, $silverValue, $winner);
 
-        return "sei la";
+        $values['gold'] = $goldValue;
+        $values['silver'] = $silverValue;
+
+        return $values;
+    }
+
+    public function updateRanking($loot)
+    {
+        return "lets see if I will have time to implement you =)";
     }
 }

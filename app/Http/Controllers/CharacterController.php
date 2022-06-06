@@ -30,7 +30,7 @@ class CharacterController extends Controller
 
     public function show(Request $request)
     {
-        return $this->service->show($request->id);
+        return $this->service->find($request->id);
     }
 
     public function validateRequest(Request $request)

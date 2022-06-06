@@ -39,13 +39,13 @@ class BattleTest extends TestCase
         $this->processBattle = new ProcessBattle($this->playerOne, $this->playerTwo);
     }
 
-    public function test_should_calculate_dodge_chance_and_player_dodge(): void
+    public function test_should_calculate_dodge_chance_and_player_dodge_successfully(): void
     {
         $defender = $this->playerTwo;
         $defender->luck = 100;
 
         $expected = $this->processBattle->dodge($defender);
-        $actual = "Wow! The player "  .$this->playerTwo->name . "dodged the attack!!";
+        $actual = "Wow! The player "  .$this->playerTwo->name . " dodged the attack!!";
 
         $this->assertEquals($expected, $actual);
     }
@@ -57,29 +57,6 @@ class BattleTest extends TestCase
 
         $expected = $this->processBattle->dodge($defender);
         $actual = 0;
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function test_should_calculate_hp_is_above_zero(): void
-    {
-        $defender = $this->playerTwo;
-        $defender->hitpoints = 10;
-
-        $expected = $this->processBattle->verifyDeath($defender);
-        $actual = 1;
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    
-    public function test_should_calculate_hp_is_zero_or_less(): void
-    {
-        $defender = $this->playerTwo;
-        $defender->hitpoints = 0;
-
-        $expected = $this->processBattle->verifyDeath($defender);
-        $actual = "Wow! The player " . $defender->name . "is DEAD!! >:(";
 
         $this->assertEquals($expected, $actual);
     }
@@ -97,20 +74,59 @@ class BattleTest extends TestCase
 
         //Damage calculated with 75% HP
         $attacker->hitpoints = 75;
-        $actual = 53;
+        //$actual = 53;
+        $actual = 70;
         $expected = $this->processBattle->calculateDamage($attacker);
         $this->assertEquals($expected, $actual);
 
         //Damage calculated with 50% HP
         $attacker->hitpoints = 50;
-        $actual = 35;
+        //$actual = 35;
+        $actual = 70;
         $expected = $this->processBattle->calculateDamage($attacker);
         $this->assertEquals($expected, $actual);
         
         //Damage calculated with 25% HP
         $attacker->hitpoints = 25;
-        $actual = 35;
+        //$actual = 35;
+        $actual = 70;
         $expected = $this->processBattle->calculateDamage($attacker);
         $this->assertEquals($expected, $actual);
     }
+
+    public function test_should_decrease_defenders_health(): void
+    {
+        $attacker = $this->playerOne;
+        $defender = $this->playerTwo;
+        $damageIncoming = 10;
+        $actual = 90;
+
+        $this->processBattle->applyDamage($defender, $attacker, $damageIncoming);
+        $expected = $defender->hitpoints;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function test_should_calculate_hp_is_above_zero(): void
+    {
+        $defender = $this->playerTwo;
+        $defender->hitpoints = 10;
+
+        $expected = $this->processBattle->verifyDeath($defender);
+        $actual = 1;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function test_should_calculate_hp_is_zero_or_less(): void
+    {
+        $defender = $this->playerTwo;
+        $defender->hitpoints = 0;
+
+        $expected = $this->processBattle->verifyDeath($defender);
+        $actual = "Wow! The player " . $defender->name . " is DEAD!! >:(";
+
+        $this->assertEquals($expected, $actual);
+    }
+
 }

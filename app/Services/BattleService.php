@@ -3,20 +3,23 @@
 namespace App\Services;
 
 use App\Jobs\ProcessBattle;
-use App\Models\Character;
+use App\Services\CharacterService;
 
 class BattleService
 {
-    public function __construct()
+    protected CharacterService $characterService;
+
+    public function __construct(CharacterService $characterService)
     {
+        $this->characterService = $characterService;
     }
 
     public function register($request)
     {
-        $character = new Character;
-        $attacker = $character->findOrFail($request['attacker']);
-        $defender = $character->findOrFail($request['defender']);
-
+        
+        $attacker = $this->characterService->find($request['attacker']);
+        $defender = $this->characterService->find($request['defender']);
+        
         ProcessBattle::dispatch($attacker, $defender);
 
         return response()->json([

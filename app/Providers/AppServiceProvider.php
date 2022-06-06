@@ -26,10 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //leaderboard and logging
-        Queue::after(function (JobProcessed $event) {
-            // $event->connectionName
-            echo "passei aqui no boot em";
-            // $event->job->payload()
-        });
+        // Queue::after(function (JobProcessed $event) {
+        //     // $event->connectionName
+        //     //dd($event->job->payload());
+        //     // $event->job->payload()
+        // });
     }
 }
