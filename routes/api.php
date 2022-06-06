@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/character/create', [CharacterController::class, 'create']);
 Route::get('/character/show', [CharacterController::class, 'show']);
+Route::get('/character/rank', [CharacterController::class, 'rank']);
 Route::post('/battle', [BattleController::class, 'battle']);
 Route::get('/leaderboard', [LeaderboardController::class, 'show']);
 Route::get('/test', [RedisTesterController::class, 'test']);

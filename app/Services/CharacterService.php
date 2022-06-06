@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Redis;
-use App\Models\Character;
 
 class CharacterService
 {
@@ -29,20 +28,30 @@ class CharacterService
             'silverLoot' => 0
         ]));
 
+        //Create the player in the leaderboard
+        $index = 'leaders:loot';
+        Redis::zadd($index, 0, $request->id);
+
         return response()->json([
             'message' => 'Your character has been created!!'
         ], 200);
     }
 
-    //update gold, silver and loot
-    public function update($data)
+    public function rankPosition($id)
     {
-        
+        $rankPosition = Redis::zrevrank('leaders:loot', $id);
+        $rankPosition++;
+        $player = $this->find($id);
+        $message = "The position of " . $player->name . " in the rank is " . $rankPosition . ".";
+
+        return response()->json([
+            'message' => $message
+        ], 200);
     }
 
     public function find($id)
     {
         $hashValue = "character_" . $id;
-        return  json_decode(Redis::get($hashValue));
+        return json_decode(Redis::get($hashValue));
     }
 }

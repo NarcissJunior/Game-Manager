@@ -33,6 +33,11 @@ class CharacterController extends Controller
         return $this->service->find($request->id);
     }
 
+    public function rank(Request $request)
+    {
+        return $this->service->rankPosition($request->id);
+    }
+
     public function validateRequest(Request $request)
     {
         $validator = Validator::make($request->all(), [

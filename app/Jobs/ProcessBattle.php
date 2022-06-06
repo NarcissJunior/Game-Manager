@@ -3,13 +3,12 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-use App\Services\BattleService;
+use Illuminate\Support\Facades\Redis;
 
 class ProcessBattle implements ShouldQueue
 {
@@ -38,7 +37,7 @@ class ProcessBattle implements ShouldQueue
         if($playerAlive != 1)
         {
             $loot = $this->calculateBattleResources($this->attacker, $this->defender);
-            //$this->updateRanking($loot);
+            $this->updateRanking($this->attacker, $loot);
         }
 
         return $this->log;
@@ -121,8 +120,12 @@ class ProcessBattle implements ShouldQueue
         return $values;
     }
 
-    public function updateRanking($loot)
+    public function updateRanking($player, $loot)
     {
-        return "lets see if I will have time to implement you =)";
+        $index = 'leaders:loot';
+        $goldPieces = $loot['gold'];
+        Redis::zincrby($index, $goldPieces, $player->id);
+
+        return "Player " . $player->name . " received " . $goldPieces . " gold pieces into your leaderboard!! =D";
     }
 }
