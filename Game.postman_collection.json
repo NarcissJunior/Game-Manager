@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "b06e4473-da67-4193-958d-0ee55a022724",
+		"name": "Game",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7955681"
+	},
+	"item": [
+		{
+			"name": "Create Character - Vecna",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/character/create?id=1&name=Vecna&description=The Lord of Chaos&gold=5&silver=20&attack=50&luck=30&hitpoints=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"character",
+						"create"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						},
+						{
+							"key": "name",
+							"value": "Vecna"
+						},
+						{
+							"key": "description",
+							"value": "The Lord of Chaos"
+						},
+						{
+							"key": "gold",
+							"value": "5"
+						},
+						{
+							"key": "silver",
+							"value": "20"
+						},
+						{
+							"key": "attack",
+							"value": "50"
+						},
+						{
+							"key": "luck",
+							"value": "30"
+						},
+						{
+							"key": "hitpoints",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Character - Max",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/character/create?id=2&name=Max&description=Mad Max the curious girl&gold=2&silver=1&attack=30&luck=15&hitpoints=80",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"character",
+						"create"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						},
+						{
+							"key": "name",
+							"value": "Max"
+						},
+						{
+							"key": "description",
+							"value": "Mad Max the curious girl"
+						},
+						{
+							"key": "gold",
+							"value": "2"
+						},
+						{
+							"key": "silver",
+							"value": "1"
+						},
+						{
+							"key": "attack",
+							"value": "30"
+						},
+						{
+							"key": "luck",
+							"value": "15"
+						},
+						{
+							"key": "hitpoints",
+							"value": "80"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Character - Dustin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/character/create?id=3&name=Dustin&description=Interesting and smart boy&gold=10&silver=50&attack=50&luck=50&hitpoints=90",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"character",
+						"create"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Dustin"
+						},
+						{
+							"key": "description",
+							"value": "Interesting and smart boy"
+						},
+						{
+							"key": "gold",
+							"value": "10"
+						},
+						{
+							"key": "silver",
+							"value": "50"
+						},
+						{
+							"key": "attack",
+							"value": "50"
+						},
+						{
+							"key": "luck",
+							"value": "50"
+						},
+						{
+							"key": "hitpoints",
+							"value": "90"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Battle",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/battle/?attacker=1&defender=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"battle",
+						""
+					],
+					"query": [
+						{
+							"key": "attacker",
+							"value": "1"
+						},
+						{
+							"key": "defender",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find character",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/character/show?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"character",
+						"show"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Player leaderboard position",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/character/rank?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"character",
+						"rank"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Leadeboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/leaderboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"leaderboard"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
