@@ -50,3 +50,14 @@ You can download it here:
 https://redis.com/redis-enterprise/redis-insight/
 
 and connect to redislab to see the database.
+
+
+When you submit a battle, this jobs enter in a queue to be processed.
+To process all battles in the queue, you need to run this command:
+
+php artisan queue:work
+
+With this, the job will process the battle and generate logs about the fights, you can check the logs in the database.
+The battle is not working 100% yet and I was not able to fix it in time because I was trying to implement all the other important things.
+
+If you have any doubts, do not hesitate to contact me.
