@@ -26,9 +26,4 @@ class BattleService
             'message' => 'You are registering a new battle!!'
         ], 200);
     }
-
-    public function updateLeaderboard($player, $amount)
-    {
-        
-    }
 }

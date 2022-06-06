@@ -16,6 +16,8 @@ class ProcessBattle implements ShouldQueue
 
     protected $attacker;
     protected $defender;
+    protected $tempAtk;
+    protected $tempDef;
     protected $log = [];
 
     public function __construct($attacker, $defender)
@@ -26,21 +28,45 @@ class ProcessBattle implements ShouldQueue
 
     public function handle()
     {
-        if($this->dodge($this->defender) == 0)
+        $playerAlive = 1;
+        $this->tempAtk = $this->attacker;
+        $this->tempDef = $this->defender;
+
+        $this->log["battlestart"] = "The battle is starting!!!";
+        $this->log["startingplayers"] = "The player " . $this->attacker->name . " challenged " . $this->defender->name . " to a fight!!";
+
+        while ($playerAlive === 1)
         {
-            $damageIncoming = $this->calculateDamage($this->attacker);
-            $this->applyDamage($this->defender, $this->attacker, $damageIncoming);
+            $this->log["attackerturn"] = "Now it is the turn to " . $this->tempAtk->name . " to attack!";
+            $this->log["defenderturn"] = "Now it is the turn to " . $this->tempDef->name . " to defend!";
+
+            if($this->dodge($this->tempDef) == 0)
+            {
+                $damageIncoming = $this->calculateDamage($this->tempAtk);
+                $this->log['damageincoming'] = "Damage incoming!!";
+                $this->applyDamage($this->tempDef, $this->tempAtk, $damageIncoming);
+            }
+
+            $playerAlive = $this->verifyDeath($this->tempDef);
+
+            $this->switchsides($this->attacker, $this->tempAtk, $this->defender, $this->tempDef);
         }
 
-        $playerAlive = $this->verifyDeath($this->defender);
+        $loot = $this->calculateBattleResources($this->attacker, $this->defender);
+        $this->updateRanking($this->attacker, $loot);
 
-        if($playerAlive != 1)
-        {
-            $loot = $this->calculateBattleResources($this->attacker, $this->defender);
-            $this->updateRanking($this->attacker, $loot);
-        }
+        $hashValue = "logfrombattle_" . rand(1, 999);
+        Redis::set($hashValue, json_encode([
+            $this->log
+        ]));
+    }
 
-        return $this->log;
+    public function switchsides($attacker, $tempAtk, $defender, $tempDef)
+    {
+        $this->log['startswitching'] = "Now we are switching attacker and defender";
+        $tempTemp = $this->tempAtk;
+        $this->tempAtk = $this->tempDef;
+        $this->tempDef = $tempTemp;
     }
 
     public function dodge($player)
@@ -68,6 +94,7 @@ class ProcessBattle implements ShouldQueue
     {
         $playerDefender->hitpoints = $playerDefender->hitpoints - $damageIncoming;
         $this->log["damagedealt"] = "The Player " . $playerDefender->name . " lost " . $damageIncoming . " hitpoints due to an attack from " . $playerAttacker->name . ".";
+        $this->log["currentHp"] = "The Player " . $playerDefender->name . " now have " . $playerDefender->hitpoints . " hitpoints.";
     }
 
     public function verifyDeath($player)
@@ -79,7 +106,9 @@ class ProcessBattle implements ShouldQueue
             return $deathLog;
         }
         else
+        {
             return 1;
+        }
     }
 
     public function decreaseResources($goldValue, $silverValue, $player)
