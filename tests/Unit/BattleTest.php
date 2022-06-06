@@ -3,7 +3,8 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\Models\Character;
+use Illuminate\Support\Facades\Redis;
+
 use App\Jobs\ProcessBattle;
 
 class BattleTest extends TestCase
@@ -16,7 +17,9 @@ class BattleTest extends TestCase
     {
         parent::setUp();
 
-        $this->playerOne = new Character();
+        $playerString = '{"id":"1","name":"Vecna","description":"The Lord of Chaos","gold":"5","silver":"20","attack":"50","luck":"30","hitpoints":"100","goldLoot":0,"silverLoot":0}';
+        $this->playerOne = json_decode($playerString);
+
         $this->playerOne->id = 1;
         $this->playerOne->name = "Vecna";
         $this->playerOne->description = "The lord of chaos";
@@ -26,7 +29,9 @@ class BattleTest extends TestCase
         $this->playerOne->luck = 10;
         $this->playerOne->hitpoints = 100;
 
-        $this->playerTwo = new Character();
+        $playerString = '{"id":"2","name":"Max","description":"Mad Max the curious girl","gold":"2","silver":"1","attack":"30","luck":"15","hitpoints":"80","goldLoot":0,"silverLoot":0}';
+        $this->playerTwo = json_decode($playerString);
+
         $this->playerTwo->id = 2;
         $this->playerTwo->name = "Max";
         $this->playerTwo->description = "Curious Girl";
